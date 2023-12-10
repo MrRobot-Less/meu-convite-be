@@ -20,9 +20,11 @@ export function validator(params: ValidateParams) {
                 item => `${item.path.join('.')}: ${item.message}`,
             );
 
-            throw new Error(
+            const error = new Error(
                 errorFormatted.toString(),
             );
+
+            return res.status(400).json({ error: 'Invalid Request', reason: error.message });
         }
 
         req[params.type] = result.data;
