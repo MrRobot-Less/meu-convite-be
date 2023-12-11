@@ -1,21 +1,21 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth";
-import Event from '../controllers/event';
-import { getEventSchema } from "../dtos/event";
 import { ParamsType, validator } from "../middlewares/validator";
+import Subscription from "../controllers/subscription";
+import { subscribeSchema } from "../dtos/subcription";
 
 const router = Router();
 
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const service = new Event();
+const service = new Subscription();
 router.get(
-	'/',
+	'/subscribe',
 	validator({
-		schema: getEventSchema,
+		schema: subscribeSchema,
 		type: ParamsType.QUERY,
 	}),
-	service.index
+	service.subscribe
 );
 export default router;

@@ -2,17 +2,17 @@ import mongoose from "../database";
 const bcrypt = require('bcryptjs');
 
 export interface UserDTO {
-	id: string,
-	email: string,
+	id: string;
+	email: string;
 	name: string;
-	password: string,
+	password: string;
 	createdAt: Date
 }
 
 const UserSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: true
+		required: true,
 	},
 	email: {
 		type: String,
