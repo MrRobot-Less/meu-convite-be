@@ -19,8 +19,4 @@ router.post(
 	service.checkout
 );
 
-router.get(
-	'/success',
-	service.success
-);
 export default router;

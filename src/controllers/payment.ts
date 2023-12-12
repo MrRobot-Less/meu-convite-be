@@ -1,10 +1,13 @@
 import { Response, Request } from "express";
-import { customerClient, payment, paymentMethod, preference } from "../config/mercadopago";
+import { customerClient, paymentMethod, preference } from "../config/mercadopago";
 import User from "../models/user";
-import { BodyRequest, ParamsRequest } from "./type";
+import { BodyRequest } from "./type";
 import { paymentFromAnItemDTO } from "../dtos/payment";
 import Plan from "../models/plan";
 import { CustomerRequestBody } from "mercadopago/dist/clients/customer/commonTypes";
+
+import * as dotenv from "dotenv";
+dotenv.config({ path: process.env.PWD+'/.env' });
 
 async function createCustomer(body : CustomerRequestBody) {
 	try {
@@ -23,9 +26,14 @@ async function customerExists(email: string) {
 	}
 }
 
-const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO>) =>{
-    const url = req.protocol + '://' + req.get('host');
-    return url;
+const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO>, endpoint: string) =>{
+    var url;
+	if (process.env.NODE_ENV === 'production') { 
+		url = req.protocol + '://' + req.get('host');
+	} else {
+		url = process.env.API_SERVER;
+	}
+    return url + endpoint;
 }
 
 export default class Payment {
@@ -57,6 +65,7 @@ export default class Payment {
 
 				preference.create({
 					body: {
+						notification_url: getFullUrl(req, '/webhook/payment/update'),
 						items: [
 							{
 								id: itemId,
@@ -67,14 +76,7 @@ export default class Payment {
 						],
 						payer : {
 							email: user.email
-						  },
-						  auto_return : "all",
-						  external_reference : user.id,
-						  back_urls : {
-							success : getFullUrl(req) + "/payment/success",
-							pending : getFullUrl(req) + "/payment/pending",
-							failure : getFullUrl(req) + "/payment/failure",
-						  }
+						},
 					}
 				}).then((data) => {
 					res.status(200).json({ redirect_to: data.init_point });
@@ -87,10 +89,4 @@ export default class Payment {
 			});
 
     }
-
-	async success(req: ParamsRequest<{ payment_id?: string, }>, res: Response) {
-		const { payment_id } = req.params;
-		if (!payment_id) return res.status(400).json({ error: 'payment_id is required' })
-		res.json({})
-	}
 }

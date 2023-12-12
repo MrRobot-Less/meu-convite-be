@@ -5,6 +5,7 @@ declare global {
 		PORT?: number;
 		PWD: string;
 		MP_ACCESS_TOKEN: string;
+		API_SERVER: string
 	  }
 	}
 }
