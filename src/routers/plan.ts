@@ -1,13 +1,13 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth";
-import Plan from "../controllers/plan";
+import PlanCtrl from "../controllers/plan";
 
 const router = Router();
 
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const service = new Plan();
+const service = new PlanCtrl();
 router.get(
 	'/:id',
 	service.id

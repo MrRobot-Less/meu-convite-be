@@ -14,7 +14,7 @@ function generateToken(params: any) {
 	return token;
 }
 
-export default class Auth {
+export default class AuthCtrl {
 	constructor() {}
 	async register(req: BodyRequest<registerUserDTO>, res: Response) {
 		

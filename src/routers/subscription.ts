@@ -1,15 +1,15 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth";
 import { ParamsType, validator } from "../middlewares/validator";
-import Subscription from "../controllers/subscription";
 import { subscribeSchema } from "../dtos/subcription";
+import SubscriptionCtrl from "../controllers/subscription";
 
 const router = Router();
 
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const service = new Subscription();
+const service = new SubscriptionCtrl();
 router.get(
 	'/subscribe',
 	validator({

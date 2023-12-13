@@ -3,7 +3,7 @@ import { QueryRequest } from "./type";
 import { webhookUpdateDTO } from "../dtos/webhook";
 import { payment } from "../config/mercadopago";
 
-export default class Webhook {
+export default class WebhookCtrl {
 	constructor() {}
 
 	async update(req: QueryRequest<webhookUpdateDTO>, res: Response) {

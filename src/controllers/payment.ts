@@ -36,7 +36,7 @@ const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO, paramsPlanPaymentDTO>
     return url + endpoint;
 }
 
-export default class Payment {
+export default class PaymentCtrl {
 	constructor() {}
 
 	async planCheckout(req: BodyRequest<paymentFromAnItemDTO, paramsPlanPaymentDTO>, res: Response){

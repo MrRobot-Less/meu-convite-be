@@ -1,18 +1,16 @@
 import { Response } from "express";
 import { QueryRequest } from "./type";
-import * as _Plan from "../models/plan";
+import Plan from "../models/plan";
 import { isValidObjectId } from "mongoose";
 
-const PlanModel = _Plan.default;
-
-export default class Plan {
+export default class PlanCtrl {
 	constructor() {}
 
 	async id(req: QueryRequest<{}, { id: string }>, res: Response) {
 		const { id } = req.params;
 		if (!isValidObjectId(id)) return res.status(400).json({ error: 'provide a valid id' });
 
-		const plan = await PlanModel.findById(id);
+		const plan = await Plan.findById(id);
 		if (!plan) return res.status(400).json({ error: 'plan not found' });
 		res.status(200).json({ plan: plan });
 	}

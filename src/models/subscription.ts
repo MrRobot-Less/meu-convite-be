@@ -2,13 +2,17 @@ import mongoose from "../database";
 
 export interface SubscriptionDTO {
 	id: string;
+	active: string;
 	userId: string;
 	planId: string;
 	createdAt: Date;
-	expires: boolean;
 }
 
 const SubscriptionSchema = new mongoose.Schema({
+	active: {
+		type: Boolean,
+		required: true
+	},
 	userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -22,11 +26,6 @@ const SubscriptionSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now,
-		required: true,
-	},
-	expires: {
-		type: Boolean,
-		default: false,
 		required: true,
 	}
 }, {
