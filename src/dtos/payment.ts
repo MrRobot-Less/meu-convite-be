@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const paymentFromAnItemSchema = {
-    itemId: z.string().min(24, 'provide a valid id'),
-	model: z.string(),
-	payment_method_id: z.string()
+    planId: z.string().min(24, 'provide a valid id'),
+    token: z.string().optional()
 };
 
-const paymentFromAnItemObject = z.object(paymentFromAnItemSchema);
+const paymentFromAnItemObject = z.strictObject(paymentFromAnItemSchema);
 export type paymentFromAnItemDTO = z.infer<typeof paymentFromAnItemObject>;
+export type paramsPlanPaymentDTO = { payment_method_id: string };

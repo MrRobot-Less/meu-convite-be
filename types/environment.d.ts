@@ -4,7 +4,8 @@ declare global {
 		NODE_ENV: 'development' | 'production';
 		PORT?: number;
 		PWD: string;
-		MP_ACCESS_TOKEN: string;
+		MP_ACCESS_TOKEN_DEVELOP: string;
+		MP_ACCESS_TOKEN_PROD: string;
 		API_SERVER: string
 	  }
 	}

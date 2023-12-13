@@ -11,12 +11,12 @@ router.use(authMiddleware);
 
 const service = new Payment();
 router.post(
-	'/',
+	'/plan/:payment_method_id',
 	validator({
 		schema: paymentFromAnItemSchema,
 		type: ParamsType.BODY
 	}),
-	service.checkout
+	service.planCheckout
 );
 
 export default router;

@@ -1,8 +1,8 @@
-import { Response, Request } from "express";
-import { customerClient, paymentMethod, preference } from "../config/mercadopago";
+import { Response } from "express";
+import { customerClient, payment } from "../config/mercadopago";
 import User from "../models/user";
 import { BodyRequest } from "./type";
-import { paymentFromAnItemDTO } from "../dtos/payment";
+import { paramsPlanPaymentDTO, paymentFromAnItemDTO } from "../dtos/payment";
 import Plan from "../models/plan";
 import { CustomerRequestBody } from "mercadopago/dist/clients/customer/commonTypes";
 
@@ -26,7 +26,7 @@ async function customerExists(email: string) {
 	}
 }
 
-const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO>, endpoint: string) =>{
+const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO, paramsPlanPaymentDTO>, endpoint: string) =>{
     var url;
 	if (process.env.NODE_ENV === 'production') { 
 		url = req.protocol + '://' + req.get('host');
@@ -39,54 +39,40 @@ const getFullUrl = (req: BodyRequest<paymentFromAnItemDTO>, endpoint: string) =>
 export default class Payment {
 	constructor() {}
 
-	async checkout(req: BodyRequest<paymentFromAnItemDTO>, res: Response){
-		const { itemId, model, payment_method_id } = req.body;
-		
-		if (model !== 'Plan') return res.status(400).json({ error: 'Model not exist.' });
+	async planCheckout(req: BodyRequest<paymentFromAnItemDTO, paramsPlanPaymentDTO>, res: Response){
+		const { planId, token } = req.body;
+		const { payment_method_id } = req.params;
 
 		const user = await User.findById(req.userId);
-		const item = await Plan.findById(itemId);
+		const plan = await Plan.findById(planId);
 		
 		if (!user) return res.status(400).json({ error: 'User not authenticated. Please, try to log in again.' });
-		if (!item) return res.status(400).json({ error: `${model} ${itemId} not found.` });
+		if (!plan) return res.status(400).json({ error: `Plan ${planId} not found.` });
 
-		paymentMethod.get()
-			.then(async methods => {
-				var methodFound = methods.find(method => method.id === payment_method_id);
-				if (!methodFound) return res.status(400).json({ error: 'Payment method is not valid.' });
-
-				if (!(await customerExists(user.email))) {
-					console.log('[+] Creating new customer...')
-					await createCustomer({
-						email: user.email,
-						first_name: user.name
-					});
-				}
-
-				preference.create({
-					body: {
-						notification_url: getFullUrl(req, '/webhook/payment/update'),
-						items: [
-							{
-								id: itemId,
-								quantity: 1,
-								unit_price: item.price,
-								title: item.name,
-							}
-						],
-						payer : {
-							email: user.email
-						},
-					}
-				}).then((data) => {
-					res.status(200).json({ redirect_to: data.init_point });
-				}).catch(e => {
-					res.status(400).json({ error: e.message });
-				})
-			})
-			.catch(error => {
-				res.status(400).json({ error: error.message });
+		if (!(await customerExists(user.email))) {
+			await createCustomer({
+				email: user.email,
+				first_name: user.name
 			});
+		}
+
+		payment.create({
+			body: {
+				notification_url: getFullUrl(req, '/webhook/payment/update'),
+				payer : {
+					email: user.email
+				},
+				transaction_amount: plan.price,
+				description: plan.name,
+				payment_method_id: payment_method_id,
+				token: token
+			}
+		}).then((data) => {
+			if (!data.id) return res.status(400).json({ error: 'id does not exists'});
+			res.status(200).json({ redirect_to: data.point_of_interaction?.transaction_data?.qr_code_base64 });
+		}).catch(e => {
+			res.status(400).json({ error: e.message });
+		})
 
     }
 }

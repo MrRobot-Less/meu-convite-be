@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ParamsRequest } from "./type";
+import { QueryRequest } from "./type";
 import * as _Plan from "../models/plan";
 import { isValidObjectId } from "mongoose";
 
@@ -8,7 +8,7 @@ const PlanModel = _Plan.default;
 export default class Plan {
 	constructor() {}
 
-	async id(req: ParamsRequest<{ id: string }>, res: Response) {
+	async id(req: QueryRequest<{}, { id: string }>, res: Response) {
 		const { id } = req.params;
 		if (!isValidObjectId(id)) return res.status(400).json({ error: 'provide a valid id' });
 
