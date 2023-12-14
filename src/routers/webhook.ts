@@ -5,7 +5,7 @@ const router = Router();
 const service = new WebhookCtrl();
 
 router.post(
-	'/payment/update',
+	'/payment/plan/update',
 	service.update
 );
 export default router;

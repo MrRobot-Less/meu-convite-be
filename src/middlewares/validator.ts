@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { Schema, ZodRawShape, z } from 'zod';
+import { ZodRawShape, z } from 'zod';
+import { AppError } from '../dtos/error';
 
 export enum ParamsType {
     QUERY = 'query',
@@ -20,11 +21,11 @@ export function validator(params: ValidateParams) {
                 item => `${item.path.join('.')}: ${item.message}`,
             );
 
-            const error = new Error(
-                errorFormatted.toString(),
+            const error = new AppError(
+                errorFormatted.toString()
             );
 
-            return res.status(400).json({ error: 'Invalid Request', reason: error.message });
+            return next(error);
         }
 
         req[params.type] = result.data;
