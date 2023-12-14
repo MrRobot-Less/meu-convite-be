@@ -64,7 +64,7 @@ export default class PaymentCtrl {
 		}).then(subscription => {
 			payment.create({
 				body: {
-					notification_url: getFullUrl(req, '/webhook/payment/plan/update'),
+					notification_url: getFullUrl(req, '/v1/webhook/payment/plan/update'),
 					payer : {
 						email: user.email
 					},

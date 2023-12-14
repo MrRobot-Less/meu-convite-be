@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // routers
-app.use(router);
+app.use('/v1', router);
 app.use(errorHandle);
 
 app.listen(PORT, () => { 
