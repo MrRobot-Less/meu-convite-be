@@ -1,0 +1,17 @@
+[
+	{
+		"name": "Básico",
+		"price": 30,
+		"limitEvents": 2
+	},
+	{
+		"name": "Intermediário",
+		"price": 45,
+		"limitEvents": 5
+	},
+	{
+		"name": "Avançado",
+		"price": 60,
+		"limitEvents": 10
+	}
+]
