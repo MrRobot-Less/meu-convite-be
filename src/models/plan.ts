@@ -4,8 +4,7 @@ export interface PlanDTO {
 	id: string;
 	name: string;
 	price: number;
-	hasQrCode: boolean;
-	limitInvites: number
+	limitEvents: number;
 }
 
 const PlanSchema = new mongoose.Schema({
@@ -17,12 +16,7 @@ const PlanSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	hasQrCode: {
-		type: Boolean,
-		required: true,
-		default: false
-	},
-	limitInvites: {
+	limitEvents: {
 		type: Number,
 		required: true
 	},

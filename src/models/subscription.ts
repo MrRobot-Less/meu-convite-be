@@ -6,6 +6,7 @@ export interface SubscriptionDTO {
 	userId: string;
 	planId: string;
 	createdAt: Date;
+	transactionId?: string
 }
 
 const SubscriptionSchema = new mongoose.Schema({
@@ -26,6 +27,9 @@ const SubscriptionSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now,
+	},
+	transactionId: {
+		type: String,
 	}
 }, {
 	collection: 'Subscription',

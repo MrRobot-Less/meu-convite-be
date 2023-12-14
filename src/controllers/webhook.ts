@@ -19,7 +19,7 @@ export default class WebhookCtrl {
 					if (result.status === 'approved') {
 						const { external_reference } = result;
 						if (!isValidObjectId(external_reference)) { next(new AppError('external_reference does not match.')); }
-						return Subscription.updateOne({ _id: external_reference }, { $set: { active: true } })
+						return Subscription.updateOne({ _id: external_reference }, { $set: { active: true, transactionId: id } })
 							.then(() => res.status(200).json({ status: result.status }))
 							.catch(error => next(error));
 							
