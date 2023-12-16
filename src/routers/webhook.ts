@@ -2,10 +2,10 @@ import { Router } from "express";
 import WebhookCtrl from "../controllers/webhook";
 
 const router = Router();
-const service = new WebhookCtrl();
+const controller = new WebhookCtrl();
 
 router.post(
 	'/payment/plan/update',
-	service.update
+	controller.update
 );
 export default router;

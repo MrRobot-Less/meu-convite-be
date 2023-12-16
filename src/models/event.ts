@@ -5,7 +5,9 @@ export interface EventDTO {
 	name: string;
 	hasQrCode: boolean;
 	subscriptionId: string;
-	invites: string[]
+	invites: string[];
+	address: string;
+	date: Date;
 }
 
 const EventSchema = new mongoose.Schema({
@@ -27,7 +29,15 @@ const EventSchema = new mongoose.Schema({
         ref: 'Invite',
 		required: true,
 		default: [],
-    }
+    },
+	address: {
+		type: String,
+		required: true
+	},
+	date: {
+		type: Date,
+		required: true
+	},
 }, {
 	collection: 'Event',
 	versionKey: false

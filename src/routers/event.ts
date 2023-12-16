@@ -1,22 +1,22 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth";
-import PaymentCtrl from "../controllers/payment";
 import { ParamsType, validator } from "../middlewares/validator";
-import { paymentFromAnItemSchema } from "../dtos/payment";
+import { createAnEventSchema } from "../dtos/event";
+import EventCtrl from "../controllers/event";
 
 const router = Router();
 
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const controller = new PaymentCtrl();
+const controller = new EventCtrl();
 router.post(
-	'/plan/:payment_method_id',
+	'/create-an-event',
 	validator({
-		schema: paymentFromAnItemSchema,
+		schema: createAnEventSchema,
 		type: ParamsType.BODY
 	}),
-	controller.planCheckout
+	controller.createAnEvent
 );
 
 export default router;

@@ -7,9 +7,9 @@ const router = Router();
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const service = new SubscriptionCtrl();
+const controller = new SubscriptionCtrl();
 router.get(
 	'/',
-	service.index
+	controller.index
 );
 export default router;

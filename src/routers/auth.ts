@@ -3,7 +3,7 @@ import { authenticateUserSchema, registerUserSchema } from '../dtos/auth';
 import { ParamsType, validator } from '../middlewares/validator';
 import AuthCtrl from '../controllers/auth';
 
-const service = new AuthCtrl();
+const controller = new AuthCtrl();
 const router = Router();
 router.post(
 	'/register',
@@ -11,7 +11,7 @@ router.post(
 		schema: registerUserSchema,
 		type: ParamsType.BODY,
 	}),
-	service.register
+	controller.register
 );
 
 router.post(
@@ -20,7 +20,7 @@ router.post(
 		schema: authenticateUserSchema,
 		type: ParamsType.BODY,
 	}),
-	service.authenticate
+	controller.authenticate
 );
 
 export default router;

@@ -1,18 +1,15 @@
 import { NextFunction, Request, Response } from "express";
+import { BodyRequest } from "./type";
+import { createAnEventDTO } from "../dtos/event";
 import { SubscriptionService } from "../services/subscription";
 
-export default class SubscriptionCtrl {
+export default class EventCtrl {
 	constructor() {}
 
-	async index(req: Request, res: Response, next: NextFunction) {
+	async createAnEvent(req: BodyRequest<createAnEventDTO>, res: Response, next: NextFunction) {
 		SubscriptionService.mySubscription(req.userId, (err, subscription) => {
 			if (err || !subscription) return next(err);
-			res.json({
-				active: subscription.active,
-				createdAt: subscription.createdAt,
-				planId: subscription.planId,
-				userId: subscription.userId
-			});
+			res.json(subscription);
 		});
 	}
 }

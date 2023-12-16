@@ -7,9 +7,9 @@ const router = Router();
 // middleware to authenticate this router
 router.use(authMiddleware);
 
-const service = new PlanCtrl();
+const controller = new PlanCtrl();
 router.get(
 	'/:id',
-	service.id
+	controller.id
 );
 export default router;
