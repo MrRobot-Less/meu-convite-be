@@ -17,7 +17,7 @@ const EventSchema = new mongoose.Schema({
 	},
 	hasQrCode: {
 		type: Boolean,
-		required: true
+		default: false
 	},
 	subscriptionId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +27,6 @@ const EventSchema = new mongoose.Schema({
 	invites: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Invite',
-		required: true,
 		default: [],
     },
 	address: {

@@ -3,7 +3,7 @@ import { payment } from "../config/mercadopago";
 import { AppError } from "../dtos/error";
 import Subscription, { SubscriptionDTO } from "../models/subscription";
 import User from "../models/user";
-import Plan from "../models/plan";
+import Plan, { PlanDTO } from "../models/plan";
 import { PaymentService } from "./payment";
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 
@@ -42,17 +42,21 @@ export const SubscriptionService = {
 			}).then((data) => {
 				if (!data.id) return cb(new AppError('id does not exists'));
 				cb(null, data);
-			}).catch(error => cb(error))	
+			}).catch(cb)	
 		})
-		.catch(error => cb(error));
+		.catch(cb);
 	},
 	mySubscription: function(userId: string, cb: (err: AppError | null, subscription?: SubscriptionDTO) => void) {
 		Subscription.findOne({ userId: userId, active: true })
+			.populate('plan')
 			.then(subscription => {
 				if (!subscription) throw new AppError('this user does not have any active subscription');
-				cb(null, subscription?.toObject());
+				cb(null, {
+					...subscription.toObject(),
+					plan: ((subscription as any).plan as any) as PlanDTO
+				});
 			})
-			.catch(error => cb(error))
+			.catch(cb)
 	},
 	updateSubscriptionAfterPayment: function(paymentId: string, cb: (err: AppError | null) => void){
 		payment.get({ id: paymentId })
@@ -62,10 +66,10 @@ export const SubscriptionService = {
 					if (!isValidObjectId(external_reference)) return cb(new AppError('external_reference does not match.'));
 					return Subscription.updateOne({ _id: external_reference }, { $set: { active: true, transactionId: paymentId } })
 						.then(() => cb(null))
-						.catch(error => cb(error));		
+						.catch(cb);		
 				}
 				cb(null);
 			})
-			.catch(error => cb(error))
+			.catch(cb)
 	}
 }

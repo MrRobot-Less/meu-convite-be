@@ -19,4 +19,9 @@ router.post(
 	controller.createAnEvent
 );
 
+router.get(
+	'/:id',
+	controller.id
+)
+
 export default router;

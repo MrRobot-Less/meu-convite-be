@@ -1,12 +1,15 @@
+import { Document } from "mongoose";
 import mongoose from "../database";
+import { PlanDTO } from "./plan";
 
 export interface SubscriptionDTO {
-	id: string;
+	_id: string;
 	active: string;
 	userId: string;
 	planId: string;
 	createdAt: Date;
-	transactionId?: string
+	transactionId?: string,
+	plan?: PlanDTO
 }
 
 const SubscriptionSchema = new mongoose.Schema({
@@ -34,6 +37,13 @@ const SubscriptionSchema = new mongoose.Schema({
 }, {
 	collection: 'Subscription',
 	versionKey: false
+});
+
+SubscriptionSchema.virtual('plan', {
+	ref: 'Plan',
+	localField: 'planId',
+	foreignField: '_id',
+	justOne: true
 });
 
 const Subscription = mongoose.model('Subscription', SubscriptionSchema);
