@@ -2,7 +2,7 @@ import mongoose from "../database";
 const bcrypt = require('bcryptjs');
 
 export interface UserDTO {
-	id: string;
+	_id: string;
 	email: string;
 	name: string;
 	password: string;

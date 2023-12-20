@@ -19,7 +19,7 @@ export default class AuthCtrl {
 	constructor() {}
 	async register(req: BodyRequest<registerUserDTO>, res: Response, next: NextFunction) {
 		
-		const newUser : Omit<UserDTO, 'createdAt' | 'id'> = {
+		const newUser : Omit<UserDTO, 'createdAt' | '_id'> = {
 			email: req.body.email,
 			name: req.body.name,
 			password: req.body.password

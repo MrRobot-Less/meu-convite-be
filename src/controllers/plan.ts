@@ -6,8 +6,7 @@ export default class PlanCtrl {
 	constructor() {}
 
 	async id(req: QueryRequest<{}, { id: string }>, res: Response, next: NextFunction) {
-		const { id } = req.params;
-		PlanService.get(id, (err, plan) => {
+		PlanService.get(req.params.id, (err, plan) => {
 			if (err) return next(err);
 			res.status(200).json({ plan: plan });
 		});	

@@ -1,9 +1,9 @@
 import mongoose from "../database";
 
 export interface GuestDTO {
-	id: string;
+	_id: string;
 	name: string;
-	type: string;
+	type?: string;
 }
 
 const GuestSchema = new mongoose.Schema({
@@ -13,7 +13,6 @@ const GuestSchema = new mongoose.Schema({
 	},
 	type: {
 		type: String,
-		required: true
 	}
 
 }, {

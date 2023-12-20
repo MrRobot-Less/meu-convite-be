@@ -1,11 +1,10 @@
 import mongoose from "../database";
 
 export interface EventDTO {
-	id: string;
+	_id: string;
 	name: string;
 	hasQrCode: boolean;
 	subscriptionId: string;
-	invites: string[];
 	address: string;
 	date: Date;
 }
@@ -23,11 +22,6 @@ const EventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Subscription',
 		required: true,
-    },
-	invites: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Invite',
-		default: [],
     },
 	address: {
 		type: String,

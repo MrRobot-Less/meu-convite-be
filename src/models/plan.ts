@@ -1,7 +1,7 @@
 import mongoose from "../database";
 
 export interface PlanDTO {
-	id: string;
+	_id: string;
 	name: string;
 	price: number;
 	limitEvents: number;

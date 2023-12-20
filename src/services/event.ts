@@ -12,12 +12,13 @@ export const EventService = {
 			})
 			.catch(cb);
 	},
-	create: function(data: Omit<EventDTO, 'id' | 'createAt' | 'invites'>, cb: (err: AppError | null, event?: EventDTO) => void) {
+	create: function(data: Omit<EventDTO, '_id' | 'createAt'>, cb: (err: AppError | null, event?: EventDTO) => void) {
 		Event.create(data).then(event => {
 			cb(null, event.toObject());
 		}).catch(cb)
 	},
-	set: function(id: string, data: Omit<EventDTO, 'id' | 'createAt' | 'invites'>, cb: (err: AppError | null) => void) {
+	set: function(id: string, data: Omit<EventDTO, '_id' | 'createAt'>, cb: (err: AppError | null) => void) {
+		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
 		Event.updateOne({ _id: id }, { $set: data })
 			.then(() => cb(null))
 			.catch(cb)

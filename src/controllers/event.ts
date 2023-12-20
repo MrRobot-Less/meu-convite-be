@@ -4,6 +4,8 @@ import { createAnEventDTO } from "../dtos/event";
 import { SubscriptionService } from "../services/subscription";
 import { EventService } from "../services/event";
 import { AppError } from "../dtos/error";
+import { addAnInviteDTO } from "../dtos/invite";
+import { InviteService } from "../services/invite";
 
 export default class EventCtrl {
 	constructor() {}
@@ -52,5 +54,13 @@ export default class EventCtrl {
 			});
 		});
 		
+	}
+
+	addInvite(req: BodyRequest<addAnInviteDTO, { id: string }>, res: Response, next: NextFunction) {
+		const eventId = req.params.id;
+		InviteService.create(eventId, req.body, (error, invite) => {
+			if (error) return next(error);
+			res.status(200).json(invite);
+		});
 	}
 }

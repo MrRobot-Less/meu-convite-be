@@ -3,6 +3,7 @@ import authMiddleware from "../middlewares/auth";
 import { ParamsType, validator } from "../middlewares/validator";
 import { createAnEventSchema } from "../dtos/event";
 import EventCtrl from "../controllers/event";
+import { addAnInviteSchema } from "../dtos/invite";
 
 const router = Router();
 
@@ -31,6 +32,15 @@ router.post(
 		type: ParamsType.BODY
 	}),
 	controller.set
+);
+
+router.post(
+	'/:id/new-invite',
+	validator({
+		schema: addAnInviteSchema,
+		type: ParamsType.BODY
+	}),
+	controller.addInvite
 );
 
 export default router;
