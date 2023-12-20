@@ -17,6 +17,11 @@ export const EventService = {
 			cb(null, event.toObject());
 		}).catch(cb)
 	},
+	set: function(id: string, data: Omit<EventDTO, 'id' | 'createAt' | 'invites'>, cb: (err: AppError | null) => void) {
+		Event.updateOne({ _id: id }, { $set: data })
+			.then(() => cb(null))
+			.catch(cb)
+	},
 	getBySubscription: function(subscriptionId: string, cb: (err: AppError | null, event?: EventDTO) => void) {
 		Event.findOne({ subscriptionId }).then(event => {
 			if (!event) throw new AppError(`there is not subscription with id ${subscriptionId}`);

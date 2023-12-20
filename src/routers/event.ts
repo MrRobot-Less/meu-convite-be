@@ -21,7 +21,16 @@ router.post(
 
 router.get(
 	'/:id',
-	controller.id
-)
+	controller.get
+);
+
+router.post(
+	'/:id',
+	validator({
+		schema: createAnEventSchema,
+		type: ParamsType.BODY
+	}),
+	controller.set
+);
 
 export default router;

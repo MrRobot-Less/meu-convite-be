@@ -29,10 +29,28 @@ export default class EventCtrl {
 		});
 	}
 
-	id(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+	get(req: Request<{ id: string }>, res: Response, next: NextFunction) {
 		EventService.get(req.params.id, (err, event) => {
 			if (err || !event) return next(err);
 			res.status(200).json(event)
 		});
+	}
+
+	set(req: BodyRequest<createAnEventDTO, { id: string }>, res: Response, next: NextFunction) {
+		SubscriptionService.mySubscription(req.userId, (err, subscription) => {
+			if (err || !subscription) return next(err);
+			
+			const data = {
+				...req.body,
+				subscriptionId: subscription._id,
+				date: new Date(req.body.date)
+			};
+
+			EventService.set(req.params.id, data, (err) => {
+				if (err) return next(err);
+				res.status(200).json({ status: 'updated' });
+			});
+		});
+		
 	}
 }
