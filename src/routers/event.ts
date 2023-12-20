@@ -4,11 +4,13 @@ import { ParamsType, validator } from "../middlewares/validator";
 import { createAnEventSchema } from "../dtos/event";
 import EventCtrl from "../controllers/event";
 import { addAnInviteSchema } from "../dtos/invite";
+import subscriptionMiddleware from "../middlewares/subscription";
 
 const router = Router();
 
 // middleware to authenticate this router
 router.use(authMiddleware);
+router.use(subscriptionMiddleware);
 
 const controller = new EventCtrl();
 router.post(

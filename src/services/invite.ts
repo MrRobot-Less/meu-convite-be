@@ -31,5 +31,10 @@ export const InviteService = {
 						cb(null, invite.toObject());
 					}).catch(cb);			
 			}).catch(cb)
+	},
+	delete: function(id: string, cb: (err: AppError | null) => void) {
+		
+		Invite.deleteOne({ _id: id }).then(() => cb(null)).catch(cb);
+		
 	}
 }

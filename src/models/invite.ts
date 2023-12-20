@@ -1,3 +1,4 @@
+import { CallbackError } from "mongoose";
 import mongoose from "../database";
 import Guest from "./guest";
 
@@ -30,10 +31,12 @@ const InviteSchema = new mongoose.Schema({
 	versionKey: false
 });
 
-InviteSchema.pre('deleteOne', async function(errorCb, invite) {
-	const { guests } = (invite as InviteDTO);
-	try { await Guest.deleteMany({ _id: { $in: guests }}); }
-	catch (error) { errorCb(error as mongoose.CallbackError); }
+InviteSchema.pre('deleteOne', async function(next) {
+	try {
+		const doc : InviteDTO | null = await this.model.findOne(this.getQuery());
+		if (doc) await Guest.deleteMany({ _id: { $in:  doc.guests }});
+	}
+	catch(error) { next(error as CallbackError); }
 });
 
 const Invite = mongoose.model('Invite', InviteSchema);
