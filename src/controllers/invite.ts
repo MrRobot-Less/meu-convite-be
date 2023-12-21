@@ -16,16 +16,10 @@ export default class InviteCtrl {
 
 	async delete(req: QueryRequest<{}, { id: string }>, res: Response, next: NextFunction) {
 		const { id } = req.params;
-		InviteService.get(id, (err, invite) => {
-			if (err || !invite) return next(err);
-			EventService.get(invite.eventId, (err, event) => {
-				if (err || !event) return next(err);
-				if (event.subscriptionId.toString() != req.subscriptionId?.toString()) return next(new AppError('action not allowed.', 401));
-				InviteService.delete(id, (err) => {
-					if (err) return next(err);
-					res.json({ status: 'deleted' });
-				})
-			});
-		});	
+		InviteService.delete(id, (err) => {
+			if (err) return next(err);
+			res.json({ status: 'deleted' });
+		});
+		
 	}
 }

@@ -46,26 +46,18 @@ export default class EventCtrl {
 			date: new Date(req.body.date)
 		};
 
-		EventService.get(id, (err, event) => {
-			if (err || !event) return next(err);
-			if (event.subscriptionId.toString() !== req.subscriptionId) return next(new AppError('Forbidden.'));
-			EventService.set(id, data, (err) => {
-				if (err) return next(err);
-				res.status(200).json({ status: 'updated' });
-			});
+		EventService.set(id, data, (err) => {
+			if (err) return next(err);
+			res.status(200).json({ status: 'updated' });
 		});
 		
 	}
 
 	addInvite(req: BodyRequest<addAnInviteDTO, { id: string }>, res: Response, next: NextFunction) {
 		const eventId = req.params.id;
-		EventService.get(eventId, (err, event) => {
-			if (err || !event) return next(err);
-			if (event.subscriptionId.toString() !== req.subscriptionId) return next(new AppError('Forbidden.'));
-			InviteService.create(eventId, req.body, (error, invite) => {
-				if (error) return next(error);
-				res.status(200).json(invite);
-			});
-		});
+		InviteService.create(eventId, req.body, (error, invite) => {
+			if (error) return next(error);
+			res.status(200).json(invite);
+		});	
 	}
 }
