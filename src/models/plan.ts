@@ -5,6 +5,7 @@ export interface PlanDTO {
 	name: string;
 	price: number;
 	limitEvents: number;
+	duration: number; // months
 }
 
 const PlanSchema = new mongoose.Schema({
@@ -19,6 +20,10 @@ const PlanSchema = new mongoose.Schema({
 	limitEvents: {
 		type: Number,
 		required: true
+	},
+	duration: {
+		type: Number,
+		default: 1
 	},
 }, {
 	collection: 'Plan',

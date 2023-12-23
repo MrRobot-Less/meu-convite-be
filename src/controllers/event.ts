@@ -6,6 +6,7 @@ import { EventService } from "../services/event";
 import { AppError } from "../dtos/error";
 import { addAnInviteDTO } from "../dtos/invite";
 import { InviteService } from "../services/invite";
+import moment from "moment";
 
 export default class EventCtrl {
 	constructor() {}
@@ -22,7 +23,7 @@ export default class EventCtrl {
 				EventService.create({
 					...req.body,
 					subscriptionId: subscription._id.toString(),
-					date: new Date(req.body.date)
+					date: moment(req.body.date).toDate()
 				}, (err, event) => {
 					if (err) return next(err);
 					res.status(200).json(event);
@@ -43,7 +44,7 @@ export default class EventCtrl {
 		const data = {
 			...req.body,
 			subscriptionId: req.subscriptionId,
-			date: new Date(req.body.date)
+			date: moment(req.body.date).toDate()
 		};
 
 		EventService.set(id, data, (err) => {

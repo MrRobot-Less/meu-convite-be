@@ -8,6 +8,7 @@ export interface SubscriptionDTO {
 	userId: string;
 	planId: string;
 	createdAt: Date;
+	expiresAt: Date;
 	transactionId?: string,
 	plan?: PlanDTO
 }
@@ -30,6 +31,10 @@ const SubscriptionSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now,
+	},
+	expiresAt: {
+		type: Date,
+		required: true,
 	},
 	transactionId: {
 		type: String,

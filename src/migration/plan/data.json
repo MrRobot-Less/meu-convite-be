@@ -2,16 +2,19 @@
 	{
 		"name": "Básico",
 		"price": 30,
-		"limitEvents": 2
+		"limitEvents": 2,
+		"duration": 1
 	},
 	{
 		"name": "Intermediário",
 		"price": 45,
-		"limitEvents": 5
+		"limitEvents": 5,
+		"duration": 1
 	},
 	{
 		"name": "Avançado",
 		"price": 60,
-		"limitEvents": 10
+		"limitEvents": 10,
+		"duration": 1
 	}
 ]

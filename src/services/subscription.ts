@@ -7,6 +7,8 @@ import Plan, { PlanDTO } from "../models/plan";
 import { PaymentService } from "./payment";
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 
+import moment from "moment";
+
 export const SubscriptionService = {
 	create: async function(userId: string, planId: string, token: string | undefined, paymentMethodId: string, cb: (error: AppError | null, data?: PaymentResponse) => void) {
 		const user = await User.findById(userId);
@@ -25,7 +27,8 @@ export const SubscriptionService = {
 		Subscription.create({
 			planId: plan.id,
 			userId: userId,
-			active: false
+			active: false,
+			expiresAt: moment().add(plan.duration, 'month')
 		}).then(subscription => {
 			payment.create({
 				body: {
