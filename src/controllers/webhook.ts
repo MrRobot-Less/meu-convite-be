@@ -16,6 +16,6 @@ export default class WebhookCtrl {
 				res.status(200).json({ status: 'ok' });
 			})
 		}
-		next(new AppError(`event ${type} not identificated.`));
+		next(new AppError(`The event ${type} is not identificated.`));
 	}
 }

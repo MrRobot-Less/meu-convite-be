@@ -5,19 +5,19 @@ import { setAnInviteDTO } from "../dtos/invite";
 
 export const GuestService = {
 	get: function(id: string, cb: (err: AppError | null, guest?: GuestDTO) => void){
-		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
+		if (!isValidObjectId(id)) return cb(new AppError('Provide a valid id.'));
 		Guest.findById(id)
 			.then(guest => {
-				if (!guest) throw new AppError('guest not found');
+				if (!guest) throw new AppError('Guest not found.');
 				cb(null, guest.toObject());
 			})
 			.catch(cb);
 	},
 	set: function(id: string, data: Omit<GuestDTO, '_id'>, cb: (err: AppError | null, guest?: GuestDTO) => void) {
-		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
+		if (!isValidObjectId(id)) return cb(new AppError('Provide a valid id.'));
 		Guest.findByIdAndUpdate(id, { $set: data }).
 			then((guest) => {
-				if (!guest) throw new AppError('guest not found');
+				if (!guest) throw new AppError('Guest not found.');
 				cb(null, guest?.toObject());
 			}).catch(cb);
 	},
@@ -56,5 +56,11 @@ export const GuestService = {
 		Promise.all(queue)
 			.then(ids => { cb(null, ids); })
 			.catch(cb);
-	}
+	},
+	delete: function(id: string, cb: (err: AppError | null, deleted?: boolean) => void) {
+		Guest.deleteOne({ _id: id }).then(result => {
+			if (result.deletedCount > 0) return cb(null);
+			cb(new AppError('The guest was not removed. Please, verify the request.'))
+		}).catch(cb);
+	},
 }

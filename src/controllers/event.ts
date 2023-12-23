@@ -13,7 +13,7 @@ export default class EventCtrl {
 	createAnEvent(req: BodyRequest<createAnEventDTO>, res: Response, next: NextFunction) {
 		SubscriptionService.mySubscription(req.userId, (err, subscription) => {
 			if (err || !subscription) return next(err);
-			if (!subscription.active) return next(new AppError('the subscription is not activate.'));
+			if (!subscription.active) return next(new AppError('The subscription is not activate.'));
 			EventService.getAllBySubscription(subscription._id.toString(), (error, events) => {
 				if (error || !events) return next(error);
 				

@@ -6,10 +6,10 @@ import { GuestService } from "./guest";
 
 export const InviteService = {
 	get: function(id: string, cb: (err: AppError | null, invite?: InviteDTO) => void){
-		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
+		if (!isValidObjectId(id)) return cb(new AppError('Provide a valid id.'));
 		Invite.findById(id)
 			.then(invite => {
-				if (!invite) throw new AppError('invite not found');
+				if (!invite) throw new AppError('Invite not found.');
 				cb(null, invite.toObject());
 			}).catch(cb);
 	},
@@ -40,7 +40,7 @@ export const InviteService = {
 						guests: guestsId
 					}
 				}).then(invite => {
-					if (!invite) throw new AppError('invite not found');
+					if (!invite) throw new AppError('Invite not found.');
 					cb(null, invite.toObject());
 				}).catch(cb);
 			});

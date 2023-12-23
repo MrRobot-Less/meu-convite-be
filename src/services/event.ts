@@ -4,10 +4,10 @@ import Event, { EventDTO } from "../models/event";
 
 export const EventService = {
 	get: function(id: string, cb: (err: AppError | null, event?: EventDTO) => void){
-		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
+		if (!isValidObjectId(id)) return cb(new AppError('Provide a valid id.'));
 		Event.findById(id)
 			.then(event => {
-				if (!event) throw new AppError('event not found');
+				if (!event) throw new AppError('Event not found.');
 				cb(null, event.toObject());
 			})
 			.catch(cb);
@@ -18,20 +18,20 @@ export const EventService = {
 		}).catch(cb)
 	},
 	set: function(id: string, data: Omit<EventDTO, '_id' | 'createAt'>, cb: (err: AppError | null) => void) {
-		if (!isValidObjectId(id)) return cb(new AppError('provide a valid id'));
+		if (!isValidObjectId(id)) return cb(new AppError('Provide a valid id.'));
 		Event.updateOne({ _id: id }, { $set: data })
 			.then(() => cb(null))
 			.catch(cb)
 	},
 	getBySubscription: function(subscriptionId: string, cb: (err: AppError | null, event?: EventDTO) => void) {
 		Event.findOne({ subscriptionId }).then(event => {
-			if (!event) throw new AppError(`there is not subscription with id ${subscriptionId}`);
+			if (!event) throw new AppError(`There is not subscription with id ${subscriptionId}.`);
 			cb(null, event.toObject());
 		}).catch(cb)
 	},
 	getAllBySubscription: function(subscriptionId: string, cb: (err: AppError | null, event?: EventDTO[]) => void) {
 		Event.find({ subscriptionId }).then(events => {
-			if (!events.length) throw new AppError(`there is not any subscription with id ${subscriptionId}`);
+			if (!events.length) throw new AppError(`There is not any subscription with id ${subscriptionId}.`);
 			cb(null, events.map(event => event.toObject()));
 		}).catch(cb)
 	}

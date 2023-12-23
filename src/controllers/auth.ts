@@ -38,8 +38,8 @@ export default class AuthCtrl {
 	async authenticate(req: BodyRequest<authenticateUserDTO>, res: Response, next: NextFunction) {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email: email }).select('+password');
-		if (!user) return next(new AppError('User not found'));
-		if (!await bcrypt.compare(password, user.password)) return next(new AppError('email or password incorrect.'));
+		if (!user) return next(new AppError('User not found.'));
+		if (!await bcrypt.compare(password, user.password)) return next(new AppError('The email or password incorrect.'));
 
 		res.status(200).send({
 			status: 'ok',

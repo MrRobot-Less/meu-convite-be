@@ -40,7 +40,7 @@ export const SubscriptionService = {
 					external_reference: subscription.id
 				}
 			}).then((data) => {
-				if (!data.id) return cb(new AppError('id does not exists'));
+				if (!data.id) return cb(new AppError('The id does not exists.'));
 				cb(null, data);
 			}).catch(cb)	
 		})
@@ -50,7 +50,7 @@ export const SubscriptionService = {
 		Subscription.findOne({ userId: userId, active: true })
 			.populate('plan')
 			.then(subscription => {
-				if (!subscription) throw new AppError('this user does not have any active subscription');
+				if (!subscription) throw new AppError('This user does not have any active subscription.');
 				cb(null, {
 					...subscription.toObject(),
 					plan: ((subscription as any).plan as any) as PlanDTO
@@ -63,7 +63,7 @@ export const SubscriptionService = {
 			.then(async result => {
 				if (result.status === 'approved') {
 					const { external_reference } = result;
-					if (!isValidObjectId(external_reference)) return cb(new AppError('external_reference does not match.'));
+					if (!isValidObjectId(external_reference)) return cb(new AppError('The external_reference does not match.'));
 					return Subscription.updateOne({ _id: external_reference }, { $set: { active: true, transactionId: paymentId } })
 						.then(() => cb(null))
 						.catch(cb);		
