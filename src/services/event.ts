@@ -23,15 +23,8 @@ export const EventService = {
 			.then(() => cb(null))
 			.catch(cb)
 	},
-	getBySubscription: function(subscriptionId: string, cb: (err: AppError | null, event?: EventDTO) => void) {
-		Event.findOne({ subscriptionId }).then(event => {
-			if (!event) throw new AppError(`There is not subscription with id ${subscriptionId}.`);
-			cb(null, event.toObject());
-		}).catch(cb)
-	},
 	getAllBySubscription: function(subscriptionId: string, cb: (err: AppError | null, event?: EventDTO[]) => void) {
 		Event.find({ subscriptionId }).then(events => {
-			if (!events.length) throw new AppError(`There is not any subscription with id ${subscriptionId}.`);
 			cb(null, events.map(event => event.toObject()));
 		}).catch(cb)
 	}

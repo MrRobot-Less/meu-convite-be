@@ -28,7 +28,7 @@ export const SubscriptionService = {
 			planId: plan.id,
 			userId: userId,
 			active: false,
-			expiresAt: moment().add(plan.duration, 'month')
+			expiresAt: moment().add(plan.duration, 'month').endOf('day')
 		}).then(subscription => {
 			payment.create({
 				body: {
@@ -50,7 +50,7 @@ export const SubscriptionService = {
 		.catch(cb);
 	},
 	mySubscription: function(userId: string, cb: (err: AppError | null, subscription?: SubscriptionDTO) => void) {
-		Subscription.findOne({ userId: userId, active: true })
+		Subscription.findOne({ userId: userId, active: true }, null, { sort: { createdAt: -1 } })
 			.populate('plan')
 			.then(subscription => {
 				if (!subscription) throw new AppError('This user does not have any active subscription.');

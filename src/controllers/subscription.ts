@@ -11,7 +11,8 @@ export default class SubscriptionCtrl {
 				active: subscription.active,
 				createdAt: subscription.createdAt,
 				planId: subscription.planId,
-				userId: subscription.userId
+				userId: subscription.userId,
+				expiresAt: subscription.expiresAt
 			});
 		});
 	}

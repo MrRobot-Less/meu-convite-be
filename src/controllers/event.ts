@@ -18,7 +18,7 @@ export default class EventCtrl {
 			EventService.getAllBySubscription(subscription._id.toString(), (error, events) => {
 				if (error || !events) return next(error);
 				
-				if (events.length > (subscription.plan?.limitEvents || 0)) return next(new AppError('the event limit has been reached.'));
+				if (events.length > (subscription.plan?.limitEvents || 0)) return next(new AppError('The event limit has been reached.'));
 				
 				EventService.create({
 					...req.body,

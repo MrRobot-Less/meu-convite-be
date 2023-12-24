@@ -18,7 +18,7 @@
 			"request": "launch",
 			"runtimeExecutable": "node",
 			"runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-			"args": ["migration/plan/create-plans.ts"],
+			"args": ["src/migration/plan/create-plans.ts"],
 			"cwd": "${workspaceRoot}",
 			"internalConsoleOptions": "openOnSessionStart",
 			"skipFiles": ["<node_internals>/**", "node_modules/**"]
