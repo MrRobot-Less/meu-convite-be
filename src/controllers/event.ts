@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { BodyRequest } from "./type";
-import { createAnEventDTO } from "../dtos/event";
+import { changeAnEventDTO, createAnEventDTO } from "../dtos/event";
 import { SubscriptionService } from "../services/subscription";
 import { EventService } from "../services/event";
 import { AppError } from "../dtos/error";
@@ -39,15 +39,8 @@ export default class EventCtrl {
 		});
 	}
 
-	set(req: BodyRequest<createAnEventDTO, { id: string }>, res: Response, next: NextFunction) {
-		const id = req.params.id;
-		const data = {
-			...req.body,
-			subscriptionId: req.subscriptionId,
-			date: moment(req.body.date).toDate()
-		};
-
-		EventService.set(id, data, (err) => {
+	set(req: BodyRequest<changeAnEventDTO, { id: string }>, res: Response, next: NextFunction) {
+		EventService.set(req.params.id, req.body, (err) => {
 			if (err) return next(err);
 			res.status(200).json({ status: 'updated' });
 		});

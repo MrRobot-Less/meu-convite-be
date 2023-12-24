@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth";
 import { ParamsType, validator } from "../middlewares/validator";
-import { createAnEventSchema } from "../dtos/event";
+import { changeAnEventSchema, createAnEventSchema } from "../dtos/event";
 import EventCtrl from "../controllers/event";
 import { addAnInviteSchema } from "../dtos/invite";
 import subscriptionMiddleware from "../middlewares/subscription";
@@ -30,7 +30,7 @@ router.get(
 router.post(
 	'/:id',
 	validator({
-		schema: createAnEventSchema,
+		schema: changeAnEventSchema,
 		type: ParamsType.BODY
 	}),
 	controller.set

@@ -9,3 +9,13 @@ export const createAnEventSchema = {
 
 const createAnEventObject = z.object(createAnEventSchema);
 export type createAnEventDTO = z.infer<typeof createAnEventObject>;
+
+export const changeAnEventSchema = {
+    name: createAnEventSchema.name.optional(),
+	hasQrCode: createAnEventSchema.hasQrCode.optional(),
+	address: createAnEventSchema.address.optional(),
+	date: createAnEventSchema.date.optional()
+};
+
+const changeAnEventObject = z.object(changeAnEventSchema);
+export type changeAnEventDTO = z.infer<typeof changeAnEventObject>;
