@@ -1,49 +1,37 @@
 import { NextFunction, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import User, { UserDTO } from '../models/user';
-import { BodyRequest } from './type';
+import { BodyRequest, QueryRequest } from './type';
 import { authenticateUserDTO, registerUserDTO } from '../dtos/auth';
-import { AppError } from '../dtos/error';
-
-const bcrypt = require('bcryptjs');
-const authConfig = require('../config/auth.json');
-
-function generateToken(params: any) {
-	const token = jwt.sign(params, authConfig.secret, {
-		expiresIn: 60 * 60 * 24 * 14 // two weeks
-	});
-	return token;
-}
+import { AuthService } from '../services/auth';
 
 export default class AuthCtrl {
 	constructor() {}
 	async register(req: BodyRequest<registerUserDTO>, res: Response, next: NextFunction) {
-		
-		const newUser : Omit<UserDTO, 'createdAt' | '_id'> = {
-			email: req.body.email,
-			name: req.body.name,
-			password: req.body.password
-		};
-
-		if (await User.findOne({ email: newUser.email })) return next(new AppError('User already registered.'));
-
-		const user = await User.create(newUser);
-
-		res.status(200).send({
-			status: 'ok',
-			token: generateToken({ id: user.id })
+		AuthService.register(req.body, (err, token) => {
+			if (err) return next(err);
+			res.status(200).send({
+				status: 'ok',
+				token: token
+			});
 		});
 	}
 
 	async authenticate(req: BodyRequest<authenticateUserDTO>, res: Response, next: NextFunction) {
-		const { email, password } = req.body;
-		const user = await User.findOne({ email: email }).select('+password');
-		if (!user) return next(new AppError('User not found.'));
-		if (!await bcrypt.compare(password, user.password)) return next(new AppError('The email or password incorrect.'));
+		AuthService.authenticate(req.body, (err, token) => {
+			if (err) return next(err);
+			res.status(200).send({
+				status: 'ok',
+				token: token
+			});
+		});
+	}
 
-		res.status(200).send({
-			status: 'ok',
-			token: generateToken({ id: user.id })
+	async validateToken(req: QueryRequest<{}, { token: string }>, res: Response, next: NextFunction) {
+		const { token } = req.params;
+		AuthService.validate(token, (err) => {
+			if (err) return next(err);
+			res.status(200).json({
+				status: 'authenticated'
+			});
 		});
 	}
 }
