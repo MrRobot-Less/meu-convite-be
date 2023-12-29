@@ -24,14 +24,4 @@ export default class AuthCtrl {
 			});
 		});
 	}
-
-	async validateToken(req: QueryRequest<{}, { token: string }>, res: Response, next: NextFunction) {
-		const { token } = req.params;
-		AuthService.validate(token, (err) => {
-			if (err) return next(err);
-			res.status(200).json({
-				status: 'authenticated'
-			});
-		});
-	}
 }
