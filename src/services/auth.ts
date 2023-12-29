@@ -1,6 +1,6 @@
 import { AppError } from "../dtos/error";
 import jwt from 'jsonwebtoken';
-import { JwtPayload, authenticateUserDTO } from "../dtos/auth";
+import { JwtPayload, authenticateUserDTO, authenticatedObject } from "../dtos/auth";
 import User, { UserDTO } from "../models/user";
 
 const bcrypt = require('bcryptjs');
@@ -14,21 +14,31 @@ function generateToken(params: any) {
 }
 
 export const AuthService = {
-	register: async function(newUser: Omit<UserDTO, 'createdAt' | '_id'>, cb: (error: AppError | null, token?: string) => void) {
+	register: async function(newUser: Omit<UserDTO, 'createdAt' | '_id'>, cb: (error: AppError | null, user?: authenticatedObject) => void) {
 		try {
 			if (await User.findOne({ email: newUser.email })) return cb(new AppError('User already registered.'));
 			const user = await User.create(newUser);
-			cb(null, generateToken({ id: user.id }));
+			cb(null, {
+				_id: user.id,
+				email: user.email,
+				name: user.name,
+				token: generateToken({ id: user.id })
+			});
 		} catch (err) {
 			cb(err as AppError);
 		}
 	},
-	authenticate: async function({ email, password }: authenticateUserDTO, cb: (err: AppError | null, token?: string) => void) {
+	authenticate: async function({ email, password }: authenticateUserDTO, cb: (err: AppError | null, user?: authenticatedObject) => void) {
 		try {
 			const user = await User.findOne({ email: email }).select('+password');
 			if (!user) return cb(new AppError('User not found.'));
 			if (!await bcrypt.compare(password, user.password)) return cb(new AppError('The email or password incorrect.'));
-			cb(null, generateToken({ id: user.id }));
+			cb(null, {
+				_id: user.id,
+				email: user.email,
+				name: user.name,
+				token: generateToken({ id: user.id })
+			});
 		} catch (err) {
 			cb(err as AppError);
 		}

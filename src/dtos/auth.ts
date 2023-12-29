@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UserDTO } from "../models/user";
 
 export type JwtPayload = {
 	id: string
@@ -20,3 +21,7 @@ export const authenticateUserSchema = {
 
 const authenticateUserObject = z.object(authenticateUserSchema);
 export type authenticateUserDTO = z.infer<typeof authenticateUserObject>;
+
+export type authenticatedObject = Omit<UserDTO, 'createdAt' | 'password'> & {
+	token: string
+};

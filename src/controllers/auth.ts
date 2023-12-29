@@ -6,21 +6,21 @@ import { AuthService } from '../services/auth';
 export default class AuthCtrl {
 	constructor() {}
 	async register(req: BodyRequest<registerUserDTO>, res: Response, next: NextFunction) {
-		AuthService.register(req.body, (err, token) => {
+		AuthService.register(req.body, (err, user) => {
 			if (err) return next(err);
 			res.status(200).send({
 				status: 'ok',
-				token: token
+				user: user
 			});
 		});
 	}
 
 	async authenticate(req: BodyRequest<authenticateUserDTO>, res: Response, next: NextFunction) {
-		AuthService.authenticate(req.body, (err, token) => {
+		AuthService.authenticate(req.body, (err, user) => {
 			if (err) return next(err);
 			res.status(200).send({
 				status: 'ok',
-				token: token
+				user: user
 			});
 		});
 	}

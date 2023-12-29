@@ -23,9 +23,4 @@ router.post(
 	controller.authenticate
 );
 
-router.get(
-	'/validate/:token',
-	controller.validateToken
-)
-
 export default router;
