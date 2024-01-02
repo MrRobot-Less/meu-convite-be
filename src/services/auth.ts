@@ -13,17 +13,22 @@ function generateToken(params: any) {
 	return token;
 }
 
+function generateSessionObject(user: UserDTO) {
+	const id = user._id.toString();
+	return {
+		_id: id,
+		email: user.email,
+		name: user.name,
+		token: generateToken({ id: id })
+	};
+}
+
 export const AuthService = {
 	register: async function(newUser: Omit<UserDTO, 'createdAt' | '_id'>, cb: (error: AppError | null, user?: authenticatedObject) => void) {
 		try {
 			if (await User.findOne({ email: newUser.email })) return cb(new AppError('User already registered.'));
 			const user = await User.create(newUser);
-			cb(null, {
-				_id: user.id,
-				email: user.email,
-				name: user.name,
-				token: generateToken({ id: user.id })
-			});
+			cb(null, generateSessionObject(user.toObject()));
 		} catch (err) {
 			cb(err as AppError);
 		}
@@ -33,12 +38,7 @@ export const AuthService = {
 			const user = await User.findOne({ email: email }).select('+password');
 			if (!user) return cb(new AppError('User not found.'));
 			if (!await bcrypt.compare(password, user.password)) return cb(new AppError('The email or password incorrect.'));
-			cb(null, {
-				_id: user.id,
-				email: user.email,
-				name: user.name,
-				token: generateToken({ id: user.id })
-			});
+			cb(null, generateSessionObject(user.toObject()));
 		} catch (err) {
 			cb(err as AppError);
 		}
