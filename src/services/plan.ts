@@ -9,7 +9,12 @@ export const PlanService = {
 			.then(plan => {
 				if (!plan) throw new AppError('Plan not found.');
 				cb(null, plan.toObject());
-			})
-			.catch(cb);
-	} 
+			}).catch(cb);
+	},
+	all: function(cb: (err: AppError | null, plan?: PlanDTO[]) => void) {
+		Plan.find({})
+			.then(plans => {
+				cb(null, plans.map(plan => plan.toObject()));
+			}).catch(cb);
+	}
 }

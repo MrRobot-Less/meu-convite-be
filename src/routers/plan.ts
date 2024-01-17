@@ -8,8 +8,15 @@ const router = Router();
 router.use(authMiddleware);
 
 const controller = new PlanCtrl();
+
+router.get(
+	'/',
+	controller.all
+);
+
 router.get(
 	'/:id',
 	controller.get
 );
+
 export default router;

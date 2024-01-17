@@ -11,4 +11,11 @@ export default class PlanCtrl {
 			res.status(200).json({ plan: plan });
 		});	
 	}
+
+	async all(req: QueryRequest<{}, { id: string }>, res: Response, next: NextFunction) {
+		PlanService.all((err, plan) => {
+			if (err) return next(err);
+			res.status(200).json({ plan: plan });
+		});	
+	}
 }

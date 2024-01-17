@@ -11,7 +11,7 @@ import * as RouterSubscription from './subscription';
 const router = Router();
 
 router.use('/auth', RouterAuth.default);
-router.use('/plan', RouterPlan.default);
+router.use('/plans', RouterPlan.default);
 router.use('/event', RouterEvent.default);
 router.use('/guest', RouterGuest.default);
 router.use('/invite', RouterInvite.default);
